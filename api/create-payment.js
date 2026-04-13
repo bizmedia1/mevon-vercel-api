@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const response = await fetch("https://api.mevonpay.com.ng/V1/createdynamic", {
+    const response = await fetch("https://mevonpay.com.ng/V1/createdynamic", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${process.env.MEVON_SECRET_KEY}`,
