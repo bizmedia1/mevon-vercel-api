@@ -32,7 +32,6 @@ export default async function handler(req, res) {
     return res.status(200).json({
       account_number: data?.data?.accountNumber,
       bank_name: data?.data?.bankName,
-  
       amount: data?.data?.amount
     });
 
