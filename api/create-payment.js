@@ -32,6 +32,7 @@ export default async function handler(req, res) {
     return res.status(200).json({
       account_number: data?.data?.accountNumber,
       bank_name: data?.data?.bankName,
+      account_name: data?.data?. accountName,
       amount: data?.data?.amount
     });
 
