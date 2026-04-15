@@ -9,35 +9,37 @@ export default async function handler(req, res) {
 
   try {
     const response = await fetch("https://mevon-vercel-api.vercel.app/api/create-payment", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${process.env.MEVON_SECRET_KEY}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        amount: 14000,
-        currency: "NGN"
-      })
-    });
+method: "POST",
+headers: {
+"Content-Type": "application/json"
+},
+body: JSON.stringify({})
+})
+.then(res => res.json())
+.then(data => {
 
-    const text = await response.text();
+if (!data.account_number) {
+throw new Error("No account returned");
+}
 
-    let data;
-    try {
-      data = JSON.parse(text);
-    } catch {
-      return res.status(500).json({ error: text });
-    }
+// 🔻 HIDE LOADER
+document.getElementById("popupLoader").style.display = "none";
 
-    return res.status(200).json({
-      account_number: data?.data?.accountNumber,
-      bank_name: data?.data?.bankName,
-      amount: data?.data?.amount
-    });
+// 🔻 SHOW ACCOUNT DETAILS
+document.getElementById("popupText").innerHTML = `
+Send <b>₦${data.amount}</b> to:<br><br>
+<b>${data.bank_name}</b><br>
+<b style="font-size:18px">${data.account_number}</b><br><br>
+Payment will be confirmed automatically.
+`;
 
-  } catch (err) {
-    return res.status(500).json({
-      error: err.message
-    });
+// 🔻 CHANGE BUTTON
+document.getElementById("activateBtn").innerText = "I have paid";
+
+})
+.catch((err) => {
+document.getElementById("popupLoader").style.display = "none";
+alert("Error: " + err.message);
+});
   }
 }
