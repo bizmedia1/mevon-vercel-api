@@ -30,10 +30,11 @@ export default async function handler(req, res) {
     }
 
     return res.status(200).json({
-      account_number: data?.data?.accountNumber,
-      bank_name: data?.data?.bankName,
-      amount: data?.data?.amount
-    });
+  account_number: data.data.accountNumber,
+  account_name: data.data.accountName,   // ✅ ADD THIS
+  bank_name: data.data.bankName,
+  amount: data.data.amount
+});
 
   } catch (err) {
     return res.status(500).json({
