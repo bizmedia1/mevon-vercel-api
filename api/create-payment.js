@@ -13,10 +13,15 @@ export default async function handler(req, res) {
       })
     });
 
-    const text = await response.text(); // 👈 IMPORTANT
+    const data = await response.json();
 
+    // ✅ return correct structure
     return res.status(200).json({
-      raw: text
+      account_number: data?.account_number,
+      account_name: data?.account_name,
+      bank_name: data?.bank_name,
+      amount: 14000,
+      reference: data?.reference // 🔥 optional (useful for Telegram proof)
     });
 
   } catch (err) {
