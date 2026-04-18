@@ -4,7 +4,7 @@ export default async function handler(req, res) {
     const response = await fetch("https://mevonpay.com.ng/V1/createtempva", {
       method: "POST",
       headers: {
-        "Authorization": process.env.MEVON_SECRET_KEY, // ⚠️ no "Bearer"
+        "Authorization": process.env.MEVON_SECRET_KEY,
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
@@ -13,17 +13,10 @@ export default async function handler(req, res) {
       })
     });
 
-    const data = await response.json();
+    const text = await response.text(); // 👈 IMPORTANT
 
-    // 🔥 LOG THIS FIRST TIME (optional but smart)
-    console.log(data);
-
-    // ✅ map response safely
     return res.status(200).json({
-      account_number: data?.data?.accountNumber || data?.accountNumber,
-      account_name: data?.data?.accountName || data?.accountName,
-      bank_name: data?.data?.bankName || data?.bankName,
-      amount: 14000
+      raw: text
     });
 
   } catch (err) {
