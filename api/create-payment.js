@@ -1,40 +1,30 @@
 export default async function handler(req, res) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-
-  if (req.method === "OPTIONS") {
-    return res.status(200).end();
-  }
-
   try {
-    const response = await fetch("https://mevonpay.com.ng/V1/createdynamic", {
+
+    const response = await fetch("https://mevonpay.com.ng/V1/createtempva", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${process.env.MEVON_SECRET_KEY}`,
+        "Authorization": process.env.MEVON_SECRET_KEY, // ⚠️ no "Bearer"
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        amount: 14000,
-        currency: "NGN"
+        fname: "John",
+        lname: "Doe"
       })
     });
 
-    const text = await response.text();
+    const data = await response.json();
 
-    let data;
-    try {
-      data = JSON.parse(text);
-    } catch {
-      return res.status(500).json({ error: text });
-    }
+    // 🔥 LOG THIS FIRST TIME (optional but smart)
+    console.log(data);
 
+    // ✅ map response safely
     return res.status(200).json({
-  account_number: data.data.accountNumber,
-  account_name: data.data.accountName,   // ✅ ADD THIS
-  bank_name: data.data.bankName,
-  amount: data.data.amount
-});
+      account_number: data?.data?.accountNumber || data?.accountNumber,
+      account_name: data?.data?.accountName || data?.accountName,
+      bank_name: data?.data?.bankName || data?.bankName,
+      amount: 14000
+    });
 
   } catch (err) {
     return res.status(500).json({
